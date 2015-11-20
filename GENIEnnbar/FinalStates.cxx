@@ -14,6 +14,10 @@ namespace larlite {
   
   bool FinalStates::analyze(storage_manager* storage) {
     
+    // for now, this function just lists all the final state particles in each event
+    
+    // once I know what to expect, can implement the library function instead
+    
     std::cout << "-------------------------------------------------" << std::endl;
     std::cout << "                  EVENT SUMMARY                  " << std::endl;
     std::cout << "-------------------------------------------------" << std::endl;
@@ -25,10 +29,16 @@ namespace larlite {
     {
       if (p.StatusCode() == 1)
       {
-        std::cout << "Final state particle w/ PDG code " << p.PdgCode() << "." << std::endl;
+        if (p.PdgCode() == 211)       nPiPlus++;
+        else if (p.PdgCode() == -211) nPiMinus++;
+        else if (p.PdgCode() == 111)  nPiZero++;
+        else
+        {
+          std::cout << "PDG code not a pion but something else! We have " << p.PdgCode() ", whatever that is." << std::endl;
+        }
       }
     }
-    
+    std::cout << nPiPlus << " pi+, " << nPiMinus << " pi-, " << nPiZero << " pi0." << std::endl;
     std::cout << "-------------------------------------------------" << std::endl << std::endl;
   
     return true;

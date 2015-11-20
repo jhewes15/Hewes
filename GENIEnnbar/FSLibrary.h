@@ -56,6 +56,7 @@ public:
   
 private:
   
+  /// Vector of final state objects
   std::vector<FinalState> FinalStates;
 
 };
