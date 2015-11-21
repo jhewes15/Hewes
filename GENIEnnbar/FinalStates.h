@@ -16,6 +16,7 @@
 #define LARLITE_FINALSTATES_H
 
 #include "Analysis/ana_base.h"
+#include "DataFormat/mctruth.h"
 #include "DataFormat/mcpart.h"
 #include "FSLibrary.h"
 
