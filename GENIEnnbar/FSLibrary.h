@@ -16,6 +16,7 @@
 
 #include <iostream>
 #include <vector>
+#include <cmath>
 
 /**
    \struct FinalState
@@ -25,7 +26,6 @@
    each type of particle are contained in it.
  */
 struct FinalState{
-  
   int _nEvents;
   int _nPiPlus;
   int _nPiMinus;
@@ -33,7 +33,7 @@ struct FinalState{
   int _nGamma;
   int _nProton;
   int _nNeutron;
-  
+  double _eff;
 };
 
 /**

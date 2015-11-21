@@ -11,6 +11,14 @@
   */
 void FSLibrary::AddEvent(FinalState s) {
   
+  // define single-particle reconstruction efficiencies
+  double PiPlusEff  = 0;
+  double PiMinusEff = 0;
+  double PiZeroEff  = 0;
+  double GammaEff   = 0;
+  double ProtonEff  = 0;
+  double NeutronEff = 0;
+  
   // Loop over all existing final states, up the tally & return if we get a match
   for(auto & fs : FinalStates)
     if (s._nPiPlus == fs._nPiPlus && s._nPiMinus == fs._nPiMinus && s._nPiZero == fs._nPiZero
@@ -21,6 +29,8 @@ void FSLibrary::AddEvent(FinalState s) {
     }
   
   // If we don't get a match, instead create a new final state.
+  s._eff = pow(PiPlusEff, s._nPiPlus) * pow(PiMinusEff, s._nPiMinus) * pow(PiZeroEff, s._nPiZero)
+  * pow(GammaEff, s._nGamma) * pow(ProtonEff, s._nProton) * pow(NeutronEff, s._nNeutron);
   FinalStates.push_back(s);
   return;
 }
