@@ -30,6 +30,9 @@ struct FinalState{
   int _nPiPlus;
   int _nPiMinus;
   int _nPiZero;
+  int _nGamma;
+  int _nProton;
+  int _nNeutron;
   
 };
 
@@ -52,7 +55,10 @@ public:
   ~FSLibrary(){}
   
   /// Add new event to library
-  void AddEvent(int nPiPlus, int nPiMinus, int nPiZero);
+  void AddEvent(FinalState s);
+  
+  /// Print summary of library
+  void Summary();
   
 private:
   

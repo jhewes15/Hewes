@@ -49,10 +49,14 @@ namespace larlite {
         Finalize method to be called after all events processed.
     */
     virtual bool finalize();
-
+    
+    void SetDebug(bool debug) {_debug = debug; return;};
+    
   private:
     
     FSLibrary * _FSLibrary;
+    
+    bool _debug = false;
     
   };
 }
