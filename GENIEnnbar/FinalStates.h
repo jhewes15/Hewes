@@ -19,6 +19,7 @@
 #include "DataFormat/mctruth.h"
 #include "DataFormat/mcpart.h"
 #include "FSLibrary.h"
+#include "TH2.h"
 
 namespace larlite {
   /**
@@ -52,12 +53,35 @@ namespace larlite {
     
     void SetDebug(bool debug) {_debug = debug; return;};
     
+    void AddToPDGHist(int pdg);
+    
   private:
     
+    // Final state library instance
     FSLibrary * _FSLibrary;
     
+    // Debug option
     bool _debug = false;
     
+    // Plots of event-wise information
+    TH1 * _hTotalP;
+    TH1 * _hTotalKE;
+    TH1 * _hPDG;
+    
+    // Plots of pion info
+    TH1 * _hPionP;
+    TH1 * _hPionKE;
+    
+    // Plots of gamma info
+    TH1 * _hGammaP;
+    TH1 * _hGammaKE;
+    
+    // Plots of nucleon info
+    TH1 * _hNucleonP;
+    TH1 * _hNucleonKE;
+    
+    // 2D plot of KE vs P per event
+    TH2 * _hTotalKEvsP;
   };
 }
 #endif
