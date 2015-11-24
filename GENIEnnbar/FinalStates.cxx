@@ -11,16 +11,18 @@ namespace larlite {
     _FSLibrary = new FSLibrary();
     
     // Instantiate histograms
-    _hTotalP     = new TH1D("_hTotalP", "Total net momentum in event", 50, 0, 2);
-    _hTotalKE    = new TH1D("_hTotalKE", "Total kinetic energy in event", 50, 0, 3);
-    _hPDG        = new TH1I("_hPDG", "PDG breakdown in event", 6, 0, 6);
-    _hPionP      = new TH1D("_hPionP", "Pion momentum", 50, 0, 2);
-    _hPionKE     = new TH1D("_hPionKE", "Pion kinetic energy", 50, 0, 2);
-    _hGammaP     = new TH1D("_hGammaP", "Gamma momentum", 50, 0, 2);
-    _hGammaKE    = new TH1D("_hGammaKE", "Gamma kinetic energy", 50, 0, 2);
-    _hNucleonP   = new TH1D("_hNucleonP","Nucleon momentum", 50, 0, 2);
-    _hNucleonKE  = new TH1D("_hNucleonKE", "Nucleon kinetic energy", 50, 0, 2);
-    _hTotalKEvsP = new TH2D("_hTotalKEvsP", "Total net momentum vs kinetic energy in event", 50, 0, 2, 50, 0, 2);
+    _hTotalP        = new TH1D("_hTotalP", "Total net momentum in event", 50, 0, 2);
+    _hTotalKE       = new TH1D("_hTotalKE", "Total kinetic energy in event", 50, 0, 3);
+    _hPDG           = new TH1I("_hPDG", "PDG breakdown in event", 6, 0, 6);
+    _hPionP         = new TH1D("_hPionP", "Pion momentum", 50, 0, 2);
+    _hPionKE        = new TH1D("_hPionKE", "Pion kinetic energy", 50, 0, 2);
+    _hChargedPionP  = new TH1D("_hChargedPionP", "Charged pion momentum", 50, 0, 2);
+    _hChargedPionKE = new TH1D("_hChargedPionKE", "Charged pion kinetic energy", 50, 0, 2);
+    _hGammaP        = new TH1D("_hGammaP", "Gamma momentum", 50, 0, 2);
+    _hGammaKE       = new TH1D("_hGammaKE", "Gamma kinetic energy", 50, 0, 2);
+    _hNucleonP      = new TH1D("_hNucleonP","Nucleon momentum", 50, 0, 2);
+    _hNucleonKE     = new TH1D("_hNucleonKE", "Nucleon kinetic energy", 50, 0, 2);
+    _hTotalKEvsP    = new TH2D("_hTotalKEvsP", "Total net momentum vs kinetic energy in event", 50, 0, 10, 10, 0, 2);
 
     return true;
   }
@@ -41,10 +43,13 @@ namespace larlite {
     fs._nNeutron = 0;
     
     // Define some useful variables
-    double totalPx = 0;
-    double totalPy = 0;
-    double totalPz = 0;
-    double totalKE = 0;
+    double totalPx   = 0;
+    double totalPy   = 0;
+    double totalPz   = 0;
+    double totalKE   = 0;
+    
+    int    nPi       = 0;
+    int    nPiC      = 0;
     
     // Get the mcparticles for this event
     for (mctruth a : * ev_truth) {
@@ -76,15 +81,34 @@ namespace larlite {
           double e  = part.Trajectory().back().E();
           
           // Add momentum & KE to relevant histogram
+          
+          // pions first
           if (part.PdgCode() == 211 || part.PdgCode() == -211 || part.PdgCode() == 111) {
+            
             _hPionKE->Fill(e);
             _hPionP->Fill(p);
+            nPi++;
+            
+            // and now just charged pions
+            if (part.PdgCode() != 111) {
+              nPiC++;
+              _hChargedPionKE->Fill(e);
+              _hChargedPionP->Fill(p);
+            }
+            
+            // now nucleons
           } else if (part.PdgCode() == 2112 || part.PdgCode() == 2212) {
+            
             _hNucleonKE->Fill(e);
             _hNucleonP->Fill(p);
+            
+            // now photons
           } else if (part.PdgCode() == 22) {
+            
             _hGammaKE->Fill(e);
             _hGammaP->Fill(p);
+            
+            // if it isn't one of those, throw an error
           } else {
             std::cout << "Unrecognised particle of type " << part.PdgCode() << ". Exiting..." << std::endl;
             exit(1);
@@ -99,6 +123,10 @@ namespace larlite {
       }
     }
     
+    // Keep track of pion multiplicities
+    _nPi.push_back(nPi);
+    _nPiC.push_back(nPiC);
+    
     // Add eventwise information to histograms
     double totalP = sqrt(pow(totalPx, 2) + pow(totalPy, 2) + pow(totalPz, 2));
     _hTotalP->Fill(totalP);
@@ -108,30 +136,30 @@ namespace larlite {
     // pass this event on to the final state library
     _FSLibrary -> AddEvent(fs);
     
-    // throw some debug output out, if that's your kind of thing
-    if (_debug) {
-      std::cout << "|-----------------------------------------------|" << std::endl;
-      std::cout << "|                 EVENT SUMMARY                 |" << std::endl;
-      std::cout << "|-----------------------------------------------|" << std::endl;
-      std::cout << "| " << fs._nPiPlus << " pi+, " << fs._nPiMinus << " pi-, "
-      << fs._nPiZero << " pi0                           |" << std::endl;
-      std::cout << "| " << fs._nGamma << " gamma, " << fs._nProton << " proton, "
-      << fs._nNeutron << " neutron                  |" << std::endl;
-      std::cout << "|-----------------------------------------------|" << std::endl << std::endl;
-    }
-    
     return true;
   }
 
   // larlite ana module finalize function
   bool FinalStates::finalize() {
     
-    _hTotalKEvsP->Draw("colz");
-    
     _fout->Write();
     
-    if (_debug)
-      _FSLibrary->Summary();
+    if (_debug) {
+      //_FSLibrary->Summary();
+      
+      double nPiMean  = 0;
+      for (double x : _nPi) nPiMean += x;
+      nPiMean /= _nPi.size();
+      
+      double nPiCMean = 0;
+      for (double x : _nPiC) nPiCMean += x;
+      nPiCMean /= _nPiC.size();
+      
+      std::cout << "\nTotal pion multiplicity           -  " << nPiMean  << std::endl;
+      std::cout << "Total charged pion multiplicity   -  "   << nPiCMean << std::endl;
+      std::cout << "Charged pion average momentum     -  "   << _hChargedPionP->GetMean()   << " GeV" << std::endl;
+      std::cout << "Charged pion average momentum RMS -  "   << _hChargedPionP->GetStdDev() << " GeV" << std::endl;
+    }
   
     return true;
   }

@@ -2,12 +2,19 @@ import sys, ROOT
 
 from larlite import larlite as fmwk
 
+if len(sys.argv) < 2:
+  msg  = '\n'
+  msg += "Usage 1: %s <input directory>\n" % sys.argv[0]
+  msg += '\n'
+  sys.stderr.write(msg)
+  sys.exit(1)
+
 # Create ana_processor instance
 my_proc = fmwk.ana_processor()
 
 # Set input root file
 for x in xrange(100):
-  filename = '/Users/jhewes15/neutrino/larlite/data/nnbar/larlite_mcinfo_{}.root'.format(x)
+  filename = '/Users/jhewes15/neutrino/larlite/data/{}/larlite_mcinfo_{}.root'.format(sys.argv[1], x)
   file = ROOT.TFile(filename)
   if not file.IsZombie():
     my_proc.add_input_file(filename)
@@ -20,7 +27,9 @@ my_proc.set_ana_output_file("FinalStateSummary.root");
 
 # Attach an analysis unit ... here we use a base class which does nothing.
 # Replace with your analysis unit if you wish.
-my_proc.add_process(fmwk.FinalStates())
+final_states_ana = fmwk.FinalStates()
+final_states_ana.SetDebug(True)
+my_proc.add_process(final_states_ana)
 
 print
 print  "Finished configuring ana_processor. Start event loop!"

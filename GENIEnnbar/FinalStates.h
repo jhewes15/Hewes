@@ -63,6 +63,10 @@ namespace larlite {
     // Debug option
     bool _debug = false;
     
+    // Eventwise information holders
+    std::vector<int> _nPi;
+    std::vector<int> _nPiC;
+    
     // Plots of event-wise information
     TH1 * _hTotalP;
     TH1 * _hTotalKE;
@@ -71,6 +75,10 @@ namespace larlite {
     // Plots of pion info
     TH1 * _hPionP;
     TH1 * _hPionKE;
+    
+    // Plots of charged pion info
+    TH1 * _hChargedPionP;
+    TH1 * _hChargedPionKE;
     
     // Plots of gamma info
     TH1 * _hGammaP;
