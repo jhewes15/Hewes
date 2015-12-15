@@ -164,6 +164,19 @@ namespace larlite {
     return true;
   }
   
+  //////////////////////////////////// THE ROUTINE ////////////////////////////////////
+  //                                                                                 //
+  //                             seriously -- shlohmo                                //
+  //                  i feel extra-natural -- lvl up                                 //
+  //                                  3030 -- deltron 3030                           //
+  //                             two ships -- field mouse                            //
+  //                  five spot after dark -- curtis fuller                          //
+  // comptine d'un autre été, l'après-midi -- yann tiersen                           //
+  //                                  sink -- qrion                                  //
+  //                             toy piano -- pony up!                               //
+  //                                                                                 //
+  /////////////////////////////////////////////////////////////////////////////////////
+  
   // Utility function for adding PDG codes to histogram
   void FinalStates::AddToPDGHist(int pdg) {
     
