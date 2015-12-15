@@ -3,8 +3,8 @@
 #
 
 # specific names for this package
-DICT  = Hewes_GENIEnnbarDict
-SHLIB = libHewes_GENIEnnbar.so
+DICT  = Hewes_nnbarParamRecoDict
+SHLIB = libHewes_nnbarParamReco.so
 SOURCES = $(filter-out $(DICT).cxx, $(wildcard *.cxx))
 FMWK_HEADERS = LinkDef.h $(DICT).h
 HEADERS = $(filter-out $(FMWK_HEADERS), $(wildcard *.h))
@@ -12,7 +12,6 @@ OBJECTS = $(SOURCES:.cxx=.o)
 
 # include options for this package
 INCFLAGS  = -I.                       #Include itself
-INCFLAGS += $(shell larlite-config --includes)
 
 # platform-specific options
 OSNAME          = $(shell uname -s)
@@ -23,7 +22,4 @@ OSNAMEMODE      = $(OSNAME)
 include $(LARLITE_BASEDIR)/Makefile/Makefile.${OSNAME}
 
 # call the common GNUmakefile
-LDFLAGS += $(shell larlite-config --libs)
 include $(LARLITE_BASEDIR)/Makefile/GNUmakefile.CORE
-
-
