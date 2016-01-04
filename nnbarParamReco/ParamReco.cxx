@@ -7,54 +7,116 @@ namespace larlite {
 
   bool ParamReco::initialize() {
 
-    //
-    // This function is called in the beggining of event loop
-    // Do all variable initialization you wish to do here.
-    // If you have a histogram to fill in the event loop, for example,
-    // here is a good place to create one on the heap (i.e. "new TH1D"). 
-    //
+    std::vector<double> energy;
+    std::vector<> momentum;
 
     return true;
   }
   
   bool ParamReco::analyze(storage_manager* storage) {
   
-    //
-    // Do your event-by-event analysis here. This function is called for 
-    // each event in the loop. You have "storage" pointer which contains 
-    // event-wise data. To see what is available, check the "Manual.pdf":
-    //
-    // http://microboone-docdb.fnal.gov:8080/cgi-bin/ShowDocument?docid=3183
-    // 
-    // Or you can refer to Base/DataFormatConstants.hh for available data type
-    // enum values. Here is one example of getting PMT waveform collection.
-    //
-    // event_fifo* my_pmtfifo_v = (event_fifo*)(storage->get_data(DATA::PMFIFO));
-    //
-    // if( event_fifo )
-    //
-    //   std::cout << "Event ID: " << my_pmtfifo_v->event_id() << std::endl;
-    //
+    auto ev_truth = storage->get_data<event_mctruth>("generator");
+    
+    // loop over all particles in event
+    
+    for (mctruth a : * ev_truth) {
+      std::vector<mcpart> particles(a.GetParticles());
+      for (mcpart part : particles) {
+        if (part.StatusCode() == 1) {
+          
+          double px = part.Trajectory().back().Px();
+          double py = part.Trajectory().back().Py();
+          double pz = part.Trajectory().back().Pz();
+          double e  = part.Trajectory().back().E();
+          
+          // do parameterised reco for each particle
+          
+          double width, q_width, e_thresh;
+          
+          if (TMath::Abs(part.PdgCode()) == 211)  { width = pipm_Ep_highwidth;  q_width = pipm_q_width;  e_thresh = pipm_e_thresh;  }
+          else if        (part.PdgCode() == 111)  { width = pi0_Ep_highwidth;   q_width = pi0_q_width;   e_thresh = pi0_e_thresh;   }
+          else if        (part.PdgCode() == 2112) { width = p_Ep_highwidth;     q_width = p_q_width;     e_thresh = p_e_thresh;     }
+          else if        (part.PdgCode() == 2212) { width = n_Ep_highwidth;     q_width = n_q_width;     e_thresh = n_e_thresh;     }
+          else if        (part.PdgCode() == 22)   { width = gamma_Ep_highwidth; q_width = gamma_q_width; e_thresh = gamma_e_thresh; }
+          else {
+            std::cerr << "An unexpected particle showed up, with PDG code " << part.PdgCode() << ". Exiting..." << std::endl;
+            exit(1);
+          }
+          
+          // smear out the momentum angle
+          TVector3 old_direction(px, py, pz);
+          double p = old_direction.Mag();
+          TVector3 new_direction = SmearAngle(old_direction, q_width * TMath::DegToRad());
+          
+          // check the width
+          width = width/100.0;
+          if(width < 0.01)width = 0.01;
+          if(width > 0.50)width = 0.50;
+          
+          // now smear out the momentum!
+          double p_reco = -1;
+          while(p_reco < 0.0)
+            p_reco = rand_var->Gaus(p,p*width);
+          
+          //use newdir unit vector to form p_reco into components.
+          new_direction *= p_reco;
+          
+          std::cout << "PDG code is " << part.PdgCode() << std::endl;
+          std::cout << "Original momentum: ";
+          old_direction.Print();
+          std::cout << "New momentum:      ";
+          new_direction.Print();
+        }
+      }
+    }
+
+    // for each particle, smear out energy and momentum
+    
+    // then add together all energy & momentum for event
   
     return true;
   }
 
   bool ParamReco::finalize() {
 
-    // This function is called at the end of event loop.
-    // Do all variable finalization you wish to do here.
-    // If you need, you can store your ROOT class instance in the output
-    // file. You have an access to the output file through "_fout" pointer.
-    //
-    // Say you made a histogram pointer h1 to store. You can do this:
-    //
-    // if(_fout) { _fout->cd(); h1->Write(); }
-    //
-    // else 
-    //   print(MSG::ERROR,__FUNCTION__,"Did not find an output file pointer!!! File not opened?");
-    //
+    // write ttree to output file
   
     return true;
+  }
+  
+  // this function stolen from dune fast mc code
+  TVector3 ParamReco::SmearAngle(TVector3 input, double theta) {
+    
+    // Unit vector smeared around Z axis by gaussian theta and pi
+    double rtheta = rand_var->Gaus(0,theta);
+    double rphi = rand_var->Uniform(2.0*3.141592654);
+    
+    // Need to have a safe copy of the input for later.
+    TVector3 vsafe = input;
+    
+    // need to make sure the input isn't along the z axis.
+    if(input.z() > 0.9999999){
+      TVector3 xaxis(1.0,0.0,0.0);
+      // get the vector normal to input and x axis with cross product
+      TVector3 vnorm = input.Cross(xaxis);
+      // rotate by theta (its +/-) around that vector
+      input.Rotate(rtheta,vnorm);
+    } else {
+      TVector3 zaxis(0.0,0.0,1.0);
+      // normal case get the vector normal to input and z axis with cross product
+      TVector3 vnorm = input.Cross(zaxis);
+      // rotate theta (its +/-) around that vector
+      input.Rotate(rtheta,vnorm);
+    }
+    
+    // now rotate by phi around original vector.
+    input.Rotate(rphi,vsafe);
+    
+    // should be unnecessary unit vector
+    TVector3 output = input.Unit();
+    
+    return output;
+    
   }
 
 }
