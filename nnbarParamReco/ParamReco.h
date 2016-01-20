@@ -16,6 +16,11 @@
 #define LARLITE_PARAMRECO_H
 
 #include "Analysis/ana_base.h"
+#include "DataFormat/mctruth.h"
+#include "TRandom3.h"
+#include "TVector3.h"
+#include "TH2.h"
+//#include "TGraph.h"
 
 namespace larlite {
   /**
@@ -47,10 +52,15 @@ namespace larlite {
     */
     virtual bool finalize();
     
+    // utility classes
+    TRandom3*      rand_var;
+    
     // variables & functions used for parameterised reconstruction
     // stolen shamelessly from dan & rik's dune fast mc code
     
     TVector3 SmearAngle(TVector3 input, double theta);
+    
+    double GetMass(int pdg);
     
     double pipm_Ep_lowwidth   = 5.0;
     double pipm_Ep_lowbias    = 1.0;
@@ -98,11 +108,16 @@ namespace larlite {
     double gamma_q_width      = 1.0;
     double gamma_q_bias       = 0.0;
     double gamma_E_thresh     = 0.030;
+    
+    TH2 * _h_nnbar;
+    TH2 * _h_atmo;
+    
+    int n_evts;
+    std::vector<double> ev_momentum;
+    std::vector<double> ev_invariant_mass;
 
   protected:
-    
-    
-    
+        
   };
 }
 #endif

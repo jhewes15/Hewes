@@ -1,4 +1,4 @@
-import sys, ROOT
+import sys
 
 if len(sys.argv) < 2:
     msg  = '\n'
@@ -16,22 +16,15 @@ my_proc = fmwk.ana_processor()
 for x in xrange(len(sys.argv)-1):
     my_proc.add_input_file(sys.argv[x+1])
 
-# New temporary input file code
-#for x in xrange(100):
-#  filename = '/Users/jhewes15/neutrino/larlite/data/{}/larlite_mcinfo_{}.root'.format(sys.argv[1], x)
-#  file = ROOT.TFile(filename)
-#  if not file.IsZombie():
-#    my_proc.add_input_file(filename)
-
 # Specify IO mode
 my_proc.set_io_mode(fmwk.storage_manager.kREAD)
 
 # Specify output root file name
-my_proc.set_ana_output_file("data/ParamReco.root");
+my_proc.set_ana_output_file("from_test_ana_you_can_remove_me.root");
 
 # Attach an analysis unit ... here we use a base class which does nothing.
 # Replace with your analysis unit if you wish.
-my_proc.add_process(fmwk.ParamReco())
+my_proc.add_process(fmwk.ana_base())
 
 print
 print  "Finished configuring ana_processor. Start event loop!"
