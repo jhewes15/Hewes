@@ -22,16 +22,15 @@ double CutQuality(std::vector<double> nnbarEnergy, std::vector<double> nnbarMome
   
   std::cout << n_nnbar_pass << " events out of " << n_nnbar << " nnbar events passed the cut." << std::endl;
   std::cout << n_atmos_pass << " events out of " << n_atmos << " atmospheric events passed the cut." << std::endl;
-  std::cout << std::endl;
   
-  if (n_atmos_pass == 0) {
-    std::cerr << "Background rate is zero. You're gonna have to deal with this problem." << std::endl;
-    exit(1);
+  double quality;
+  if (n_atmos_pass == 0) quality = 0;
+  else {
+    double efficiency = (double)n_nnbar_pass / (double)n_nnbar;
+    std::cout << "Efficiency " << efficiency << ", background " << n_atmos_pass << std::endl;
+    quality = efficiency / sqrt((double)n_atmos);
   }
-  
-  double efficiency = (double)n_nnbar_pass / (double)n_nnbar;
 
-  double quality = efficiency / sqrt((double)n_atmos);
   return quality;
 }
 
@@ -74,60 +73,43 @@ void OptimiseCuts() {
   // which makes life way way easier
   
   std::vector<double> cuts;
-  cuts.resize[4];
-  cuts = { 1, 2, 0, 0.5 };
+  cuts.resize(4);
+  cuts[0] = 1;
+  cuts[1] = 2;
+  cuts[2] = 0;
+  cuts[3] = 0.5;
   
   double constraint = 0.5;
-  
-  for (int j = 0; j < 4; j++) {
-    std::vector<double> cuts_temp = cuts;
-    std::vector<double> candidate;
-    candidate.resize(11);
-    std::vector<double> candidate_quality;
-    candidate_quality.resize(11);
-    for (int k = 0; k < 11; k++) {
-      temp_cuts[j] += (k - 5) * constraint;
+  for (int i = 0; i < 10; i++) {
+    for (int j = 0; j < 4; j++) {
+      std::vector<double> temp_cuts = cuts;
+      std::vector<double> candidate;
+      candidate.resize(11);
+      std::vector<double> candidate_quality;
+      candidate_quality.resize(11);
+      
       int    best_index = 5;
       double best_value = 0;
-      double quality = CutQuality(_nnbarEnergy, _nnbarMomentum, _atmosEnergy, _atmosMomentum, temp_cuts);
-      if (quality > best_value) {
-        best_value = quality;
-        best_index = k;
+      for (int k = 0; k < 11; k++) {
+        temp_cuts[j] = cuts[j] + (k - 5) * constraint;
+        if (temp_cuts[j] < 0) temp_cuts[j] = 0;
+        candidate[k] = temp_cuts[j];
+        double quality = CutQuality(_nnbarEnergy, _nnbarMomentum, _atmosEnergy, _atmosMomentum, temp_cuts);
+        std::cout << "For cuts " << temp_cuts[0] << ", " << temp_cuts[1] << ", " << temp_cuts[2] << ", " << temp_cuts[3] << " quality is " << quality << std::endl;
+        if (quality > best_value) {
+          best_value = quality;
+          best_index = k;
+        }
       }
+      std::cout << "Best candidate is " << candidate[best_index] << " with quality " << best_value << std::endl;
+      std::cout << std::endl;
+      cuts[j] = candidate[best_index];
     }
-    cuts[j] = candidate[best_index];
+    constraint *= 0.5;
   }
   
-  double constraint = 0.2;
-  double _energyMin = 1;
-  double _energyMax = 2;
-
-  double _momentumMin = 0;
-  double _momentumMax = 0.5;
-  
-  std::vector<double> _candidate;
-  std::vector<double> _candidateQuality;
-  
-  double _energyMinTemp   = _energyMin;
-  double _energyMaxTemp   = _energyMax;
-  double _momentumMinTemp = _momentumMin;
-  double _momentumMaxTemp = _momentumMax;
-  
-  _candidate.clear();
-  _candidate.resize(11);
-  _quality.clear();
-  _quality.resize(11);
-  
-  for (int i = 0; i < 11; i++) {
-    _candidate[i] = _energyMin + ((i - 5) * constraint);
-    _quality[i]   = CutQuality(
-    
-  }
-  
-  double _quality = CutQuality(_nnbarEnergy, _nnbarMomentum, _atmosEnergy, _atmosMomentum, _energyMin, _energyMax, _momentumMin, _momentumMax);
-  
-  std::cout << "Quality is " << _quality << std::endl;
-  
+  std::cout << "FINAL SUMMARY: best cut values are " << cuts[0] << ", " << cuts[1] << ", " << cuts[2] << ", " << cuts[3] << std::endl;
+  CutQuality(_nnbarEnergy, _nnbarMomentum, _atmosEnergy, _atmosMomentum, cuts);
   // figure out the figure of merit
   
   // vary all four of the cuts at once, try to zone in on the area of best selection
