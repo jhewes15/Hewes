@@ -10,6 +10,16 @@
 #pragma link off all functions;
 
 #pragma link C++ class larlite::Pi0ShowerFilter+;
+#pragma link C++ class larlite::MassPeak+;
+#pragma link C++ class larlite::ShowerQuality+;
+#pragma link C++ class ertool::ERAnaFlashEfficiency+;
+#pragma link C++ class larlite::DrawLine+;
+#pragma link C++ class ertool::ERAnaMassPeak+;
 //ADD_NEW_CLASS ... do not change this line
 #endif
+
+
+
+
+
 

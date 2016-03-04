@@ -13,21 +13,25 @@ namespace larlite {
   
   bool Pi0ShowerFilter::analyze(storage_manager* storage) {
 
-    bool keep = false;
-
     auto particles = storage->get_data<event_pfpart>("pandoraNu");
     if(!particles) {
-      print(larlite::msg::kERROR,__FUNCTION__,Form("Did not find specified data product, pfpart!"));
+      print(larlite::msg::kWARNING,__FUNCTION__,Form("Did not find specified data product, pfpart!"));
       return false;
     }
 
+    int n_showers = 0;
+
     for (auto particle : *particles) {
-      std::cout << "Particle's pdg code is " << particle.PdgCode() << "." << std::endl;
+      //if (particle.PdgCode() == 11) n_showers++;
+      print(larlite::msg::kNORMAL,__FUNCTION__,Form("This particle's PDG code is %i",particle.PdgCode()));
     }
 
-    keep = true;
+    //if (n_showers < 2) {
+    //  print(larlite::msg::kWARNING,__FUNCTION__,Form("Fewer than 2 showers in this event, not continuing any further."));
+    //  return false;
+    //}
 
-    return keep;
+    return true;
 
   }
 
