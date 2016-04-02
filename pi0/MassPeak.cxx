@@ -49,12 +49,12 @@ namespace larlite {
       return false;
     }
     
-    int num_reco_showers = ev_shower->size();
+    int num_reco_showers = ev_shwr->size();
     
     // get associated clusters
     
     event_cluster * ev_cluster = nullptr;
-    auto const& ass_cluster_v = storage->find_one_ass(ev_shower->id(), ev_cluster, ev_shower->name());
+    auto const& ass_cluster_v = storage->find_one_ass(ev_shwr->id(), ev_cluster, ev_shwr->name());
     
     // get all reconstructed showers
   
