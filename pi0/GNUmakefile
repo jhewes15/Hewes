@@ -14,6 +14,7 @@ OBJECTS = $(SOURCES:.cxx=.o)
 INCFLAGS  = -I.                       #Include itself
 INCFLAGS += $(shell seltool-config --includes)
 INCFLAGS += $(shell larlite-config --includes)
+INCFLAGS += $(shell recotool-config --includes)
 
 # platform-specific options
 OSNAME          = $(shell uname -s)
@@ -26,6 +27,7 @@ include $(LARLITE_BASEDIR)/Makefile/Makefile.${OSNAME}
 # call the common GNUmakefile
 LDFLAGS += $(shell larlite-config --libs)
 LDFLAGS += $(shell seltool-config --libs)
+LDFLAGS += $(shell recotool-config --libs)
 include $(LARLITE_BASEDIR)/Makefile/GNUmakefile.CORE
 
 

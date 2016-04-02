@@ -53,9 +53,9 @@ namespace larlite {
     virtual bool finalize();
     
     /// Function to calculate invariant mass for a pair of showers
-    double CalculateMass(shower shower1, shower shower1);
+    double CalculateMass(shower shower1, shower shower2);
     
-    void SetShowerProducer(string producer) { shower_producer = producer; };
+    void SetShowerProducer(std::string producer) { shower_producer = producer; };
     
     void SetEnergyCut    (double cut) { energy_cut     = cut; };
     void SetAngleCut     (double cut) { angle_cut      = cut; };
@@ -64,7 +64,7 @@ namespace larlite {
 
   protected:
     
-    string shower_producer;
+    std::string shower_producer;
     
     double energy_cut     = 40.;
     double angle_cut      = 0.00873;
@@ -75,10 +75,10 @@ namespace larlite {
     
     int n_showers; /// number of reconstructed showers in event
     
-    std::vector<double> mass_inclusive /// invariant mass of all shower pairs
-    std::vector<double> mass_exclusive /// invariant mass of shower pairs that pass all cuts
+    std::vector<double> mass_inclusive; /// invariant mass of all shower pairs
+    std::vector<double> mass_exclusive; /// invariant mass of shower pairs that pass all cuts
     
-    std::vector<double> start_point_distance /// distance between shower start points
+    std::vector<double> start_point_distance; /// distance between shower start points
     
   };
 }
