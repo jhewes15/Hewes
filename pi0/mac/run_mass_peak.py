@@ -96,10 +96,10 @@ def ERTool():
   #ana_unit._mgr.AddAna(ana_flashefficiency)
 
   ana_masspeak = ertool.ERAnaMassPeak()
-  ana_masspeak.SetEnergyCut(40.)
-  ana_masspeak.SetAngleCut(0.175)
-  ana_masspeak.SetEnergySumCut(70.)
-  ana_masspeak.SetVtxCut(100.)
+  ana_masspeak.SetEnergyCut(50.)
+  ana_masspeak.SetAngleCut(0.3)
+  ana_masspeak.SetAsymmetryCut(0.8)
+  ana_masspeak.SetVtxCut(10.)
   ana_unit._mgr.AddAna(ana_masspeak)
 
   return ana_unit
