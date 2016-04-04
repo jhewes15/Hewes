@@ -51,17 +51,17 @@ namespace ertool {
     
     double CalculateMass(Shower shower1, Shower shower2);
     
-    void SetEnergyCut(double cut)    { energy_cut     = cut; };
-    void SetAngleCut(double cut)     { angle_cut      = cut; };
-    void SetEnergySumCut(double cut) { energy_sum_cut = cut; };
-    void SetVtxCut(double cut)       { vtx_cut        = cut; };
+    void SetEnergyCut(double cut)    { energy_cut    = cut; };
+    void SetAngleCut(double cut)     { angle_cut     = cut; };
+    void SetAsymmetryCut(double cut) { asymmetry_cut = cut; };
+    void SetVtxCut(double cut)       { vtx_cut       = cut; };
     
   protected:
     
-    double energy_cut     = 40.;
-    double angle_cut      = 0.0873;
-    double energy_sum_cut = 70.;
-    double vtx_cut        = 100.;
+    double energy_cut    = 50.;
+    double angle_cut     = 0.3;
+    double asymmetry_cut = 0.8;
+    double vtx_cut       = 10.;
     
     TTree * MassPeak;
     

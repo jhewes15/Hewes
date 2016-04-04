@@ -76,7 +76,7 @@ namespace ertool {
         
         // make our cuts
         if (angle < angle_cut) continue; // minimum angle
-        else if (shower1._energy + shower2._energy < energy_sum_cut) continue;
+        else if (fabs(shower1._energy - shower2._energy) / (shower1._energy + shower2._energy) < asymmetry_cut) continue;
         else if (dist > vtx_cut) continue;
         
         if (dist < vtx_cut) {
