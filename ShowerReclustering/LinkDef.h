@@ -9,9 +9,10 @@
 #pragma link off all classes;
 #pragma link off all functions;
 
-#pragma link C++ class larlite::TrackQuality+;
-#pragma link C++ class larlite::GeneratorInfo+;
+#pragma link C++ class larlite::ShowerContainment+;
+#pragma link C++ class larlite::ShowerHitRestorer+;
 //ADD_NEW_CLASS ... do not change this line
 #endif
+
 
 
