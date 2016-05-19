@@ -12,36 +12,48 @@ from ROOT import TFile, TTree
 from matplotlib import pyplot as plt
 from matplotlib.colors import colorConverter as cc
 
-#my_proc = fmwk.ana_processor()
-#
-#for x in xrange(len(sys.argv)-1):
-#  my_proc.add_input_file(sys.argv[x+1])
-#
-#my_proc.set_io_mode(fmwk.storage_manager.kREAD)
-#
-filename = "./genie_study/files/GenieTree.root"
-#my_proc.set_ana_output_file(filename)
-#my_proc.add_process(fmwk.GeneratorInfo())
-#
-#print
-#print  "Finished configuring ana_processor. Start event loop!"
-#print
-#
-#my_proc.run()
-#
-#print
-#print  "Finished running ana_processor event loop!"
-#print
+print  "Would you like to run larlite? [y/n]"
+while True:
+  choice = raw_input().lower()
+  if choice == "y":
+    run_larlite = True
+  elif choice == "n":
+    run_larlite = False
+  else:
+    print  "Didn't understand that. Please type \"y\" or \"n\"."
 
-#print  "Would you like to generate plots? [y/n]"
-#while True:
-#  choice = raw_input().lower()
-#  if choice == "y":
-#    break
-#  elif choice == "n":
-#    sys.exit(0)
-#  else:
-#    print  "Didn't understand that. Please type \"y\" or \"n\"."
+if run_larlite:
+
+  my_proc = fmwk.ana_processor()
+
+  for x in xrange(len(sys.argv)-1):
+    my_proc.add_input_file(sys.argv[x+1])
+
+  my_proc.set_io_mode(fmwk.storage_manager.kREAD)
+
+  filename = "./GenieTree.root"
+  my_proc.set_ana_output_file(filename)
+  my_proc.add_process(fmwk.GeneratorInfo())
+
+  print
+  print  "Finished configuring ana_processor. Start event loop!"
+  print
+
+  my_proc.run()
+
+  print
+  print  "Finished running ana_processor event loop!"
+  print
+
+  print  "Would you like to generate plots? [y/n]"
+  while True:
+    choice = raw_input().lower()
+    if choice == "y":
+      break
+    elif choice == "n":
+      sys.exit(0)
+    else:
+      print  "Didn't understand that. Please type \"y\" or \"n\"."
 
 file = TFile(filename,"read")
 tree = file.Get("genie_tree")
@@ -88,7 +100,7 @@ plt.title('Primary particle multiplicity')
 plt.xlabel('No. particles')
 plt.ylabel('No. events')
 plt.legend()
-plt.savefig("./genie_study/plots/01_multiplicity.pdf")
+plt.savefig("./plots/01_multiplicity.pdf")
 plt.clf()
 
 plt.hist( pion_momentum, 50, range=[0,1], histtype='stepfilled', edgecolor=cc.to_rgba('b',1), facecolor=cc.to_rgba('b',0.4), normed=True, label='pion' )
@@ -97,7 +109,7 @@ plt.title('Primary particle momentum')
 plt.xlabel('Momentum [GeV]')
 plt.ylabel('No. particles [normed]')
 plt.legend()
-plt.savefig("./genie_study/plots/02_momentum.pdf")
+plt.savefig("./plots/02_momentum.pdf")
 plt.clf()
 
 plt.hist( pion_tracklen, 50, range=[0,200], histtype='stepfilled', edgecolor=cc.to_rgba('b',1), facecolor=cc.to_rgba('b',0.4), normed=True, label='pi+/-' )
@@ -106,7 +118,7 @@ plt.title('Primary particle track length')
 plt.xlabel('Track length [cm]')
 plt.ylabel('No. particles [normed]')
 plt.legend()
-plt.savefig("./genie_study/plots/03_tracklen.pdf")
+plt.savefig("./plots/03_tracklen.pdf")
 
  
 
