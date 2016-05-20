@@ -8,9 +8,6 @@ if len(sys.argv) < 2:
   sys.exit(1)
 
 from larlite import larlite as fmwk
-from ROOT import TFile, TTree
-from matplotlib import pyplot as plt
-from matplotlib.colors import colorConverter as cc
 
 # Choice of whether to run larlite
 print  "Would you like to run larlite? [y/n]"
@@ -18,8 +15,10 @@ while True:
   choice = raw_input().lower()
   if choice == "y":
     run_larlite = True
+    break
   elif choice == "n":
     run_larlite = False
+    break
   else:
     print  "Didn't understand that. Please type \"y\" or \"n\"."
 
@@ -58,6 +57,10 @@ while True:
   else:
     print  "Didn't understand that. Please type \"y\" or \"n\"."
 
+from ROOT import TFile, TTree
+from matplotlib import pyplot as plt
+from matplotlib.colors import colorConverter as cc
+
 # Open larlite output ana file
 file = TFile(filename,"read")
 tree = file.Get("genie_tree")
@@ -84,7 +87,7 @@ ev_momentum_wo_nuc = []
 ev_mass_w_nuc = []
 ev_mass_wo_nuc = []
 
-# Loop over all events in the tree
+# Loop over all events in tree
 for event in tree:
 
 # Fill the pion & nucleon multiplicities
@@ -114,9 +117,9 @@ for event in tree:
     nucleon_tracklen.append(a)
 
 # Get the event net momentum & invariant mass
-ev_momentum_w_nuc.append(
+#ev_momentum_w_nuc.append(
 
-# Plot particle multiplicity
+# Plot particle multiplicity
 plt.hist( pion_multiplicity, 20, range=[0,20], histtype='stepfilled', edgecolor=cc.to_rgba('b',1), facecolor=cc.to_rgba('b',0.4) , label='pion' )
 plt.hist( nucleon_multiplicity, 20, range=[0,20], histtype='stepfilled', edgecolor=cc.to_rgba('r',1), facecolor=cc.to_rgba('r',0.4), label='nucleon' )
 plt.title('Primary particle multiplicity')
@@ -126,7 +129,7 @@ plt.legend()
 plt.savefig("./plots/01_multiplicity.pdf")
 plt.clf()
 
-# Plot particle momentum
+# Plot particle momentum
 plt.hist( pion_momentum, 50, range=[0,1], histtype='stepfilled', edgecolor=cc.to_rgba('b',1), facecolor=cc.to_rgba('b',0.4), normed=True, label='pion' )
 plt.hist( nucleon_momentum, 50, range=[0,1], histtype='stepfilled', edgecolor=cc.to_rgba('r',1), facecolor=cc.to_rgba('r',0.4), normed=True, label='nucleon' )
 plt.title('Primary particle momentum')
@@ -136,7 +139,7 @@ plt.legend()
 plt.savefig("./plots/02_momentum.pdf")
 plt.clf()
 
-# Plot particle tracklength
+# Plot particle tracklength
 plt.hist( pion_tracklen, 50, range=[0,200], histtype='stepfilled', edgecolor=cc.to_rgba('b',1), facecolor=cc.to_rgba('b',0.4), normed=True, label='pi+/-' )
 plt.hist( nucleon_tracklen, 50, range=[0,200], histtype='stepfilled', edgecolor=cc.to_rgba('r',1), facecolor=cc.to_rgba('r',0.4), normed=True, label='nucleon' )
 plt.title('Primary particle track length')
@@ -146,7 +149,7 @@ plt.legend()
 plt.savefig("./plots/03_tracklen.pdf")
 
 # Plot total net momentum
-plt.hist( )
+#plt.hist( )
 
 
 
