@@ -68,14 +68,7 @@ namespace larlite {
     std::vector<double> mom_pip;
     std::vector<double> mom_pim;
     std::vector<double> mom_pi0;
-    
-    // tracklen
-    std::vector<double> trklen_n;
-    std::vector<double> trklen_p;
-    std::vector<double> trklen_pip;
-    std::vector<double> trklen_pim;
-    std::vector<double> trklen_pi0;
-    
+        
     // event info
     double tot_mom_w_nuc;
     double tot_mom_wo_nuc;

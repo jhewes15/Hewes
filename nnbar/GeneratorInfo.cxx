@@ -21,12 +21,6 @@ namespace larlite {
     _tree->Branch("mom_pim","std::vector<double>",&mom_pim);
     _tree->Branch("mom_pi0","std::vector<double>",&mom_pi0);
     
-    _tree->Branch("trklen_n","std::vector<double>",&trklen_n);
-    _tree->Branch("trklen_p","std::vector<double>",&trklen_p);
-    _tree->Branch("trklen_pip","std::vector<double>",&trklen_pip);
-    _tree->Branch("trklen_pim","std::vector<double>",&trklen_pim);
-    _tree->Branch("trklen_pi0","std::vector<double>",&trklen_pi0);
-    
     _tree->Branch("tot_mom_w_nuc",&tot_mom_w_nuc,"tot_mom_w_nuc/D");
     _tree->Branch("tot_mom_wo_nuc",&tot_mom_wo_nuc,"tot_mom_wo_nuc/D");
     _tree->Branch("tot_im_w_nuc",&tot_im_w_nuc,"tot_im_w_nuc/D");
@@ -45,6 +39,8 @@ namespace larlite {
     // get mctruth info
     mctruth truth = (*(storage->get_data<event_mctruth>("generator")))[0];
     std::vector<mcpart> particles(truth.GetParticles());
+
+    print(msg::kNORMAL,__FUNCTION__,Form("Number of particles in this event is %lu",particles.size()));
     
     // mctruth information
     mult_n = 0;
@@ -98,29 +94,6 @@ namespace larlite {
     tot_im_w_nuc = w_nuc.Mag();
     tot_im_wo_nuc = wo_nuc.Mag();
     
-    auto ev_mctrack = *(storage->get_data<event_mctrack>("mcreco"));
-    
-    for (mctrack mctrk : ev_mctrack) {
-      double tracklen = (mctrk.Start().Position().Vect() - mctrk.End().Position().Vect()).Mag();
-      switch (mctrk.PdgCode()) {
-        case 2112:
-          trklen_n.push_back(tracklen);
-          break;
-        case 2212:
-          trklen_p.push_back(tracklen);
-          break;
-        case 211:
-          trklen_pip.push_back(tracklen);
-          break;
-        case -211:
-          trklen_pim.push_back(tracklen);
-          break;
-        case 111:
-          trklen_pi0.push_back(tracklen);
-          break;
-      }
-    }
-  
     _tree->Fill();
     
     mom_n.clear();
@@ -128,13 +101,7 @@ namespace larlite {
     mom_pip.clear();
     mom_pim.clear();
     mom_pi0.clear();
-    
-    trklen_n.clear();
-    trklen_p.clear();
-    trklen_pip.clear();
-    trklen_pim.clear();
-    trklen_pi0.clear();
-    
+        
     return true;
   }
 

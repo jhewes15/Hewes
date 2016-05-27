@@ -9,6 +9,8 @@ if len(sys.argv) < 2:
 
 from larlite import larlite as fmwk
 
+filename = "./GenieTree.root"
+
 # Choice of whether to run larlite
 print  "Would you like to run larlite? [y/n]"
 while True:
@@ -32,7 +34,6 @@ if run_larlite:
 
   my_proc.set_io_mode(fmwk.storage_manager.kREAD)
 
-  filename = "./GenieTree.root"
   my_proc.set_ana_output_file(filename)
   my_proc.add_process(fmwk.GeneratorInfo())
 
@@ -117,7 +118,10 @@ for event in tree:
     nucleon_tracklen.append(a)
 
 # Get the event net momentum & invariant mass
-#ev_momentum_w_nuc.append(
+  ev_momentum_w_nuc.append( event.tot_mom_w_nuc )
+  ev_momentum_wo_nuc.append( event.tot_mom_wo_nuc )
+  ev_mass_w_nuc.append( event.tot_im_w_nuc )
+  ev_mass_wo_nuc.append( event.tot_im_wo_nuc )
 
 # Plot particle multiplicity
 plt.hist( pion_multiplicity, 20, range=[0,20], histtype='stepfilled', edgecolor=cc.to_rgba('b',1), facecolor=cc.to_rgba('b',0.4) , label='pion' )
@@ -127,6 +131,7 @@ plt.xlabel('No. particles')
 plt.ylabel('No. events')
 plt.legend()
 plt.savefig("./plots/01_multiplicity.pdf")
+plt.savefig("./plots/01_multiplicity.png")
 plt.clf()
 
 # Plot particle momentum
@@ -137,6 +142,7 @@ plt.xlabel('Momentum [GeV]')
 plt.ylabel('No. particles [normed]')
 plt.legend()
 plt.savefig("./plots/02_momentum.pdf")
+plt.savefig("./plots/02_momentum.png")
 plt.clf()
 
 # Plot particle tracklength
@@ -147,9 +153,28 @@ plt.xlabel('Track length [cm]')
 plt.ylabel('No. particles [normed]')
 plt.legend()
 plt.savefig("./plots/03_tracklen.pdf")
+plt.savefig("./plots/03_tracklen.png")
+plt.clf()
 
 # Plot total net momentum
-#plt.hist( )
+plt.hist( ev_momentum_w_nuc, 50, histtype='stepfilled', edgecolor=cc.to_rgba('b',1), facecolor=cc.to_rgba('b',0.4), label='Pions & nucleons' )
+#plt.hist( ev_momentum_wo_nuc, 50, histtype='stepfilled', edgecolor=cc.to_rgba('r',1), facecolor=cc.to_rgba('r',0.4), label='Pions only' )
+plt.title('Total net momentum')
+plt.xlabel('Net momentum [GeV]')
+plt.ylabel('No. events')
+plt.legend( loc=2 )
+plt.savefig("./plots/04_netmomentum.pdf")
+plt.savefig("./plots/04_netmomentum.png")
+plt.clf()
 
-
+# Plot total invariant mass
+plt.hist( ev_mass_w_nuc, 50, histtype='stepfilled', edgecolor=cc.to_rgba('b',1), facecolor=cc.to_rgba('b',0.4), label='Pions & nucleons' )
+#plt.hist( ev_mass_wo_nuc, 50, histtype='stepfilled', edgecolor=cc.to_rgba('r',1), facecolor=cc.to_rgba('r',0.4), label='Pions only' )
+plt.title('Total invariant mass')
+plt.xlabel('Invariant mass [GeV]')
+plt.ylabel('No. events')
+plt.legend( loc=2 )
+plt.savefig("./plots/05_invariantmass.pdf")
+plt.savefig("./plots/05_invariantmass.png")
+plt.clf()
 
