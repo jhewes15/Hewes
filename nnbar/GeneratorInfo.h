@@ -51,16 +51,24 @@ namespace larlite {
     */
     virtual bool finalize();
 
+    // set FSI switched on / off
+    void FsiEnabled(bool is) { fsi_enabled = is; }
+
   protected:
     
+    // output tree
     TTree * _tree;
     
+    // do we have any FSI enabled here?
+    bool fsi_enabled = true;
+
     // multiplicities
     int mult_n;
     int mult_p;
     int mult_pip;
     int mult_pim;
     int mult_pi0;
+    int mult_om;
     
     // momentum
     std::vector<double> mom_n;
@@ -74,6 +82,44 @@ namespace larlite {
     double tot_mom_wo_nuc;
     double tot_im_w_nuc;
     double tot_im_wo_nuc;
+
+    // select the event topology
+    int topology() {
+      if (mult_pip == 1 && mult_pim == 0 && mult_pi0 == 1 && mult_om == 0)
+        return 1;
+      else if (mult_pip == 1 && mult_pim == 0 && mult_pi0 == 2 && mult_om == 0)
+        return 2;
+      else if (mult_pip == 1 && mult_pim == 0 && mult_pi0 == 3 && mult_om == 0)
+        return 3;
+      else if (mult_pip == 2 && mult_pim == 1 && mult_pi0 == 1 && mult_om == 0)
+        return 4;
+      else if (mult_pip == 2 && mult_pim == 1 && mult_pi0 == 2 && mult_om == 0)
+        return 5;
+      else if (mult_pip == 2 && mult_pim == 1 && mult_pi0 == 0 && mult_om == 2)
+        return 6;
+      else if (mult_pip == 3 && mult_pim == 2 && mult_pi0 == 1 && mult_om == 0)
+        return 7;
+      else if (mult_pip == 1 && mult_pim == 1 && mult_pi0 == 0 && mult_om == 0)
+        return 8;
+      else if (mult_pip == 0 && mult_pim == 0 && mult_pi0 == 2 && mult_om == 0)
+        return 9;
+      else if (mult_pip == 1 && mult_pim == 1 && mult_pi0 == 1 && mult_om == 0)
+        return 10;
+      else if (mult_pip == 1 && mult_pim == 1 && mult_pi0 == 2 && mult_om == 0)
+        return 11;
+      else if (mult_pip == 1 && mult_pim == 1 && mult_pi0 == 3 && mult_om == 0)
+        return 12;
+      else if (mult_pip == 2 && mult_pim == 2 && mult_pi0 == 0 && mult_om == 0)
+        return 13;
+      else if (mult_pip == 2 && mult_pim == 2 && mult_pi0 == 1 && mult_om == 0)
+        return 14;
+      else if (mult_pip == 1 && mult_pim == 1 && mult_pi0 == 0 && mult_om == 1)
+        return 15;
+      else if (mult_pip == 2 && mult_pim == 2 && mult_pi0 == 2 && mult_om == 0)
+        return 16;
+      print(msg::kWARNING,__FUNCTION__,Form("Warning! Couldn't find a reasonable final state for this."));
+      return 0;
+    }
     
   };
 }

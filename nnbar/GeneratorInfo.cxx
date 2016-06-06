@@ -48,6 +48,7 @@ namespace larlite {
     mult_pip = 0;
     mult_pim = 0;
     mult_pi0 = 0;
+    mult_om = 0;
     
     TLorentzVector w_nuc, wo_nuc;
                                   
@@ -83,7 +84,16 @@ namespace larlite {
           w_nuc += fourvec;
           wo_nuc += fourvec;
           break;
+        case 332:
+          mult_om++;
+          w_nuc += fourvec;
+          wo_nuc += fourvec;
+          break;
       }
+    }
+
+    if (!fsi_enabled) {
+      print(msg::kNORMAL,__FUNCTION__,Form("Selected a final state: %i",))
     }
     
     // net momentum
