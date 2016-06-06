@@ -1,4 +1,5 @@
 import sys
+from ROOT import TFile
 
 if len(sys.argv) < 2:
   msg  = '\n'
@@ -107,16 +108,6 @@ for event in tree:
   for a in event.mom_p:
     nucleon_momentum.append(a)
 
-# Fill the pion & nucleon tracklengths
-  for a in event.trklen_pip:
-    pion_tracklen.append(a)
-  for a in event.trklen_pim:
-    pion_tracklen.append(a)
-  for a in event.trklen_n:
-    nucleon_tracklen.append(a)
-  for a in event.trklen_p:
-    nucleon_tracklen.append(a)
-
 # Get the event net momentum & invariant mass
   ev_momentum_w_nuc.append( event.tot_mom_w_nuc )
   ev_momentum_wo_nuc.append( event.tot_mom_wo_nuc )
@@ -145,17 +136,6 @@ plt.savefig("./plots/02_momentum.pdf")
 plt.savefig("./plots/02_momentum.png")
 plt.clf()
 
-# Plot particle tracklength
-plt.hist( pion_tracklen, 50, range=[0,200], histtype='stepfilled', edgecolor=cc.to_rgba('b',1), facecolor=cc.to_rgba('b',0.4), normed=True, label='pi+/-' )
-plt.hist( nucleon_tracklen, 50, range=[0,200], histtype='stepfilled', edgecolor=cc.to_rgba('r',1), facecolor=cc.to_rgba('r',0.4), normed=True, label='nucleon' )
-plt.title('Primary particle track length')
-plt.xlabel('Track length [cm]')
-plt.ylabel('No. particles [normed]')
-plt.legend()
-plt.savefig("./plots/03_tracklen.pdf")
-plt.savefig("./plots/03_tracklen.png")
-plt.clf()
-
 # Plot total net momentum
 plt.hist( ev_momentum_w_nuc, 50, histtype='stepfilled', edgecolor=cc.to_rgba('b',1), facecolor=cc.to_rgba('b',0.4), label='Pions & nucleons' )
 #plt.hist( ev_momentum_wo_nuc, 50, histtype='stepfilled', edgecolor=cc.to_rgba('r',1), facecolor=cc.to_rgba('r',0.4), label='Pions only' )
@@ -163,8 +143,8 @@ plt.title('Total net momentum')
 plt.xlabel('Net momentum [GeV]')
 plt.ylabel('No. events')
 plt.legend( loc=2 )
-plt.savefig("./plots/04_netmomentum.pdf")
-plt.savefig("./plots/04_netmomentum.png")
+plt.savefig("./plots/03_netmomentum.pdf")
+plt.savefig("./plots/03_netmomentum.png")
 plt.clf()
 
 # Plot total invariant mass
@@ -174,7 +154,7 @@ plt.title('Total invariant mass')
 plt.xlabel('Invariant mass [GeV]')
 plt.ylabel('No. events')
 plt.legend( loc=2 )
-plt.savefig("./plots/05_invariantmass.pdf")
-plt.savefig("./plots/05_invariantmass.png")
+plt.savefig("./plots/04_invariantmass.pdf")
+plt.savefig("./plots/04_invariantmass.png")
 plt.clf()
 

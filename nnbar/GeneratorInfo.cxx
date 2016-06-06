@@ -93,7 +93,7 @@ namespace larlite {
     }
 
     if (!fsi_enabled) {
-      print(msg::kNORMAL,__FUNCTION__,Form("Selected a final state: %i",))
+      print(msg::kNORMAL,__FUNCTION__,Form("Selected a final state: %i",topology()));
     }
     
     // net momentum

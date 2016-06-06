@@ -20,7 +20,7 @@ endif
 #
 # Define directories to be compile upon a global "make"...
 #
-SUBDIRS := nnbarGenie nnbarParamReco nnbarTruthEvSel Pi0Benchmark pi0 nnbar ShowerReclustering #ADD_NEW_SUBDIR ... do not remove this comment from this line
+SUBDIRS := nnbarGenie nnbarParamReco nnbarTruthEvSel Pi0Benchmark pi0 nnbar #ADD_NEW_SUBDIR ... do not remove this comment from this line
 
 #####################################################################################
 #
