@@ -25,7 +25,12 @@ namespace larlite {
     _tree->Branch("tot_mom_wo_nuc",&tot_mom_wo_nuc,"tot_mom_wo_nuc/D");
     _tree->Branch("tot_im_w_nuc",&tot_im_w_nuc,"tot_im_w_nuc/D");
     _tree->Branch("tot_im_wo_nuc",&tot_im_wo_nuc,"tot_im_wo_nuc/D");
-    
+
+    if (!fsi_enabled) {
+      _datacomparison_tree = new TTree("datacomparison","");
+      _datacomparison_tree->Branch("dipion_mass_10",&dipion_mass_10,"dipion_mass_10/D");
+    }
+
     return true;
   }
   
@@ -39,8 +44,6 @@ namespace larlite {
     // get mctruth info
     mctruth truth = (*(storage->get_data<event_mctruth>("generator")))[0];
     std::vector<mcpart> particles(truth.GetParticles());
-
-    print(msg::kNORMAL,__FUNCTION__,Form("Number of particles in this event is %lu",particles.size()));
     
     // mctruth information
     mult_n = 0;
@@ -92,8 +95,23 @@ namespace larlite {
       }
     }
 
-    if (!fsi_enabled) {
-      print(msg::kNORMAL,__FUNCTION__,Form("Selected a final state: %i",topology()));
+    if (!fsi_enabled && topology() == final_state) {
+      if (particles.size() == 3) {
+        TLorentzVector part1 = particles.at(0).Trajectory().at(0).Momentum();
+        TLorentzVector part2 = particles.at(1).Trajectory().at(0).Momentum();
+        TLorentzVector part3 = particles.at(2).Trajectory().at(0).Momentum();
+        TLorentzVector combination = part1 + part2;
+        dipion_mass_10 = combination.Mag();
+        _datacomparison_tree->Fill();
+        combination = part2 + part3;
+        dipion_mass_10 = combination.Mag();
+        _datacomparison_tree->Fill();
+        combination = part1 + part3;
+        dipion_mass_10 = combination.Mag();
+        _datacomparison_tree->Fill();
+      }
+      else
+        print(msg::kWARNING,__FUNCTION__,Form("Warning! Was expecting 3 particles in here, but there are %lu.",particles.size()));
     }
     
     // net momentum
@@ -119,6 +137,8 @@ namespace larlite {
 
     if(_fout) {
       _tree->Write();
+      if (!fsi_enabled)
+        _datacomparison_tree->Write();
     }
   
     return true;

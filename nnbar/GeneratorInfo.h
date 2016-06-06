@@ -54,13 +54,20 @@ namespace larlite {
     // set FSI switched on / off
     void FsiEnabled(bool is) { fsi_enabled = is; }
 
+    // cherrypick a specific final state
+    void SetFinalState(int fs) { final_state = fs; }
+
   protected:
     
     // output tree
     TTree * _tree;
+
+    // data comparison tree
+    TTree * _datacomparison_tree;
     
     // do we have any FSI enabled here?
     bool fsi_enabled = true;
+    int final_state = 0;
 
     // multiplicities
     int mult_n;
@@ -82,6 +89,9 @@ namespace larlite {
     double tot_mom_wo_nuc;
     double tot_im_w_nuc;
     double tot_im_wo_nuc;
+
+    // data comparison variables
+    double dipion_mass_10;
 
     // select the event topology
     int topology() {

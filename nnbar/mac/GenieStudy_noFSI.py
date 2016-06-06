@@ -38,6 +38,7 @@ if run_larlite:
 
   ana_gen_info = fmwk.GeneratorInfo()
   ana_gen_info.FsiEnabled(False)
+  ana_gen_info.SetFinalState(10)
   my_proc.add_process(ana_gen_info)
 
   print
