@@ -11,7 +11,9 @@
 
 #pragma link C++ class larlite::TrackQuality+;
 #pragma link C++ class larlite::GeneratorInfo+;
+#pragma link C++ class larlite::DataComparison+;
 //ADD_NEW_CLASS ... do not change this line
 #endif
+
 
 

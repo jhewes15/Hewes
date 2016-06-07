@@ -35,11 +35,7 @@ if run_larlite:
   my_proc.set_io_mode(fmwk.storage_manager.kREAD)
 
   my_proc.set_ana_output_file(filename)
-
-  ana_gen_info = fmwk.GeneratorInfo()
-  ana_gen_info.FsiEnabled(False)
-  ana_gen_info.SetFinalState(10)
-  my_proc.add_process(ana_gen_info)
+  my_proc.add_process(fmwk.DataComparison())
 
   print
   print  "Finished configuring ana_processor. Start event loop!"
@@ -50,6 +46,8 @@ if run_larlite:
   print
   print  "Finished running ana_processor event loop!"
   print
+
+sys.exit()
 
 # Choice of whether to generate plots
 print  "Would you like to generate plots? [y/n]"
