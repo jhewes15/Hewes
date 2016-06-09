@@ -1,15 +1,6 @@
 import sys
 from ROOT import TFile
 
-if len(sys.argv) < 2:
-  msg  = '\n'
-  msg += "Usage 1: {} $INPUT_ROOT_FILE(s)\n".format(sys.argv[0])
-  msg += '\n'
-  sys.stderr.write(msg)
-  sys.exit(1)
-
-from larlite import larlite as fmwk
-
 filename = "./GenieTree.root"
 
 # Choice of whether to run larlite
@@ -27,6 +18,15 @@ while True:
 
 # If running larlite, set up & run the larlite process
 if run_larlite:
+
+  if len(sys.argv) < 2:
+    msg  = '\n'
+    msg += "Usage 1: {} $INPUT_ROOT_FILE(s)\n".format(sys.argv[0])
+    msg += '\n'
+    sys.stderr.write(msg)
+    sys.exit(1)
+
+  from larlite import larlite as fmwk
 
   my_proc = fmwk.ana_processor()
 
@@ -116,22 +116,22 @@ for event in tree:
 
 # Plot particle multiplicity
 plt.hist( pion_multiplicity, 20, range=[0,20], histtype='stepfilled', edgecolor=cc.to_rgba('b',1), facecolor=cc.to_rgba('b',0.4) , label='pion' )
-plt.hist( nucleon_multiplicity, 20, range=[0,20], histtype='stepfilled', edgecolor=cc.to_rgba('r',1), facecolor=cc.to_rgba('r',0.4), label='nucleon' )
-plt.title('Primary particle multiplicity')
+#plt.hist( nucleon_multiplicity, 20, range=[0,20], histtype='stepfilled', edgecolor=cc.to_rgba('r',1), facecolor=cc.to_rgba('r',0.4), label='nucleon' )
+plt.title('Pion multiplicity')
 plt.xlabel('No. particles')
 plt.ylabel('No. events')
-plt.legend()
+#plt.legend()
 plt.savefig("./plots/01_multiplicity.pdf")
 plt.savefig("./plots/01_multiplicity.png")
 plt.clf()
 
 # Plot particle momentum
 plt.hist( pion_momentum, 50, range=[0,1], histtype='stepfilled', edgecolor=cc.to_rgba('b',1), facecolor=cc.to_rgba('b',0.4), normed=True, label='pion' )
-plt.hist( nucleon_momentum, 50, range=[0,1], histtype='stepfilled', edgecolor=cc.to_rgba('r',1), facecolor=cc.to_rgba('r',0.4), normed=True, label='nucleon' )
-plt.title('Primary particle momentum')
+#plt.hist( nucleon_momentum, 50, range=[0,1], histtype='stepfilled', edgecolor=cc.to_rgba('r',1), facecolor=cc.to_rgba('r',0.4), normed=True, label='nucleon' )
+plt.title('Pion momentum')
 plt.xlabel('Momentum [GeV]')
 plt.ylabel('No. particles [normed]')
-plt.legend()
+#plt.legend()
 plt.savefig("./plots/02_momentum.pdf")
 plt.savefig("./plots/02_momentum.png")
 plt.clf()
