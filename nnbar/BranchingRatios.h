@@ -16,6 +16,8 @@
 #define LARLITE_BRANCHINGRATIOS_H
 
 #include "Analysis/ana_base.h"
+#include "DataFormat/mctruth.h"
+#include "TTree.h"
 
 namespace larlite {
   /**
