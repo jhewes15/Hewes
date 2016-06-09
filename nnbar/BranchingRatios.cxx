@@ -26,7 +26,7 @@ namespace larlite {
     n_omega   = 0;
 
     for (auto part : particles) {
-      switch (part.Pdg()) {
+      switch (part.PdgCode()) {
         case 211:
           n_piplus++;
           break;
