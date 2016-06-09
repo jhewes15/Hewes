@@ -51,7 +51,7 @@ namespace larlite {
       }
     }
 
-    switch (trajectory()) {
+    switch (topology()) {
       case 10:
         TLorentzVector combination;
         combination = fourvec_piplus[0] + fourvec_piminus[0];

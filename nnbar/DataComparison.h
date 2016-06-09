@@ -16,8 +16,10 @@
 #define LARLITE_DATACOMPARISON_H
 
 #include "Analysis/ana_base.h"
+#include "DataFormat/mctruth.h"
 #include "TTree.h"
 #include <vector>
+
 
 namespace larlite {
 
