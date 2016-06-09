@@ -60,6 +60,44 @@ namespace larlite {
 
     // final state
     int final_state;
+
+    // select final state topology
+    int topology() {
+      if (n_piplus == 1 && n_piminus == 0 && n_pizero == 1 && n_omega == 0)
+        return 1;
+      else if (n_piplus == 1 && n_piminus == 0 && n_pizero == 2 && n_omega == 0)
+        return 2;
+      else if (n_piplus == 1 && n_piminus == 0 && n_pizero == 3 && n_omega == 0)
+        return 3;
+      else if (n_piplus == 2 && n_piminus == 1 && n_pizero == 1 && n_omega == 0)
+        return 4;
+      else if (n_piplus == 2 && n_piminus == 1 && n_pizero == 2 && n_omega == 0)
+        return 5;
+      else if (n_piplus == 2 && n_piminus == 1 && n_pizero == 0 && n_omega == 2)
+        return 6;
+      else if (n_piplus == 3 && n_piminus == 2 && n_pizero == 1 && n_omega == 0)
+        return 7;
+      else if (n_piplus == 1 && n_piminus == 1 && n_pizero == 0 && n_omega == 0)
+        return 8;
+      else if (n_piplus == 0 && n_piminus == 0 && n_pizero == 2 && n_omega == 0)
+        return 9;
+      else if (n_piplus == 1 && n_piminus == 1 && n_pizero == 1 && n_omega == 0)
+        return 10;
+      else if (n_piplus == 1 && n_piminus == 1 && n_pizero == 2 && n_omega == 0)
+        return 11;
+      else if (n_piplus == 1 && n_piminus == 1 && n_pizero == 3 && n_omega == 0)
+        return 12;
+      else if (n_piplus == 2 && n_piminus == 2 && n_pizero == 0 && n_omega == 0)
+        return 13;
+      else if (n_piplus == 2 && n_piminus == 2 && n_pizero == 1 && n_omega == 0)
+        return 14;
+      else if (n_piplus == 1 && n_piminus == 1 && n_pizero == 0 && n_omega == 1)
+        return 15;
+      else if (n_piplus == 2 && n_piminus == 2 && n_pizero == 2 && n_omega == 0)
+        return 16;
+      print(msg::kWARNING,__FUNCTION__,Form("Warning! Couldn't find a reasonable final state for this."));
+      return 0;
+    }
     
   };
 }
