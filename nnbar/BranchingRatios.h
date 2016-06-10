@@ -98,7 +98,7 @@ namespace larlite {
       else if (n_piplus == 2 && n_piminus == 2 && n_pizero == 2 && n_omega == 0)
         return 16;
       print(msg::kWARNING,__FUNCTION__,Form("Warning! Couldn't find a reasonable final state for this."));
-      return 0;
+      return -1;
     }
     
   };

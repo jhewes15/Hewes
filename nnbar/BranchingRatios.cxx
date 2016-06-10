@@ -43,6 +43,9 @@ namespace larlite {
     }
     
     final_state = topology();
+    if (final_state == -1)
+      for (auto part : particles)
+        print(msg::kWARNING,__FUNCTION__,Form("Particle's PDG code is %i",part.PdgCode()));
     _tree->Fill();
 
     return true;
